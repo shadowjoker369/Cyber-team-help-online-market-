@@ -37,18 +37,26 @@
     nav a:hover { color: lime; }
     .hero {
       text-align: center;
-      padding: 80px 20px;
+      padding: 60px 20px;
       background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
-                  url('https://i.ibb.co/jzfZpWm/hacking-bg.jpg') center/cover;
+                  url('https://vault.pictures/p/f0f791614a334149a4e1ddf79e460699') center/cover no-repeat;
     }
-    .hero h2 {
-      font-size: 40px;
-      color: cyan;
-      margin-bottom: 10px;
+    .hero h2 { font-size: 40px; color: cyan; }
+    .hero p { font-size: 18px; color: #bbb; }
+    .search-filter {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px;
+      flex-wrap: wrap;
     }
-    .hero p {
-      font-size: 18px;
-      color: #bbb;
+    .search-filter input, .search-filter select {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: #111;
+      color: #eee;
+      font-size: 14px;
     }
     .products {
       padding: 40px 20px;
@@ -63,6 +71,7 @@
       text-align: center;
       padding: 15px;
       transition: 0.3s;
+      cursor: pointer;
     }
     .card:hover {
       transform: translateY(-5px);
@@ -72,11 +81,7 @@
       width: 100%;
       border-radius: 8px;
     }
-    .card h3 {
-      margin: 15px 0 5px;
-      color: cyan;
-    }
-    .card p { margin: 5px 0; }
+    .card h3 { margin: 15px 0 5px; color: cyan; }
     .btn {
       background: cyan;
       color: #000;
@@ -89,12 +94,13 @@
       transition: 0.3s;
     }
     .btn:hover { background: lime; }
-    .about {
+    .about, .contact {
       padding: 40px 20px;
-      background: #111;
       text-align: center;
+      background: #111;
+      margin-top: 20px;
     }
-    .about h2 { color: lime; }
+    .about h2, .contact h2 { color: lime; }
     footer {
       background: #111;
       padding: 20px;
@@ -102,6 +108,32 @@
       border-top: 2px solid lime;
       color: gray;
       font-size: 14px;
+    }
+    /* Popup Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    .modal-content {
+      background: #1b1b1b;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .modal-content h3 { color: cyan; margin-bottom: 10px; }
+    .modal-content p { margin: 10px 0; }
+    .close {
+      float: right;
+      font-size: 20px;
+      cursor: pointer;
+      color: red;
     }
   </style>
 </head>
@@ -118,34 +150,45 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="hero">
     <h2>Hack Tools & Apps Store</h2>
     <p>Premium Cyber Tools for Professionals</p>
   </section>
 
+  <!-- Search & Filter -->
+  <div class="search-filter">
+    <input type="text" id="search" placeholder="🔍 Search tools...">
+    <select id="category">
+      <option value="all">All Categories</option>
+      <option value="tool">Tools</option>
+      <option value="app">Apps</option>
+      <option value="vpn">VPN</option>
+    </select>
+  </div>
+
   <!-- Products -->
   <section class="products" id="products">
-    <div class="card">
-      <img src="https://via.placeholder.com/250x150?text=IP+Tracker" alt="IP Tracker">
+    <div class="card" data-category="tool" data-name="IP Tracker Pro" data-price="500" onclick="showDetails(this)">
+      <img src="https://iili.io/KYJaI0Q.md.jpg" alt="IP Tracker">
       <h3>IP Tracker Pro</h3>
       <p>৳ 500</p>
       <button class="btn">Buy Now</button>
     </div>
-    <div class="card">
-      <img src="https://via.placeholder.com/250x150?text=Wifi+Cracker" alt="Wifi Cracker">
+    <div class="card" data-category="tool" data-name="Wifi Cracker" data-price="800" onclick="showDetails(this)">
+      <img src="https://iili.io/KYJch3Q.md.jpg" alt="Wifi Cracker">
       <h3>Wifi Cracker</h3>
       <p>৳ 800</p>
       <button class="btn">Buy Now</button>
     </div>
-    <div class="card">
-      <img src="https://via.placeholder.com/250x150?text=VPN+App" alt="VPN">
+    <div class="card" data-category="vpn" data-name="Anonymous VPN" data-price="1200" onclick="showDetails(this)">
+      <img src="https://iili.io/KYJlfou.md.jpg" alt="VPN">
       <h3>Anonymous VPN</h3>
       <p>৳ 1200</p>
       <button class="btn">Buy Now</button>
     </div>
-    <div class="card">
-      <img src="https://via.placeholder.com/250x150?text=OSINT+Suite" alt="OSINT">
+    <div class="card" data-category="app" data-name="OSINT Recon Suite" data-price="1500" onclick="showDetails(this)">
+      <img src="https://iili.io/KYJlXxn.md.jpg" alt="OSINT">
       <h3>OSINT Recon Suite</h3>
       <p>৳ 1500</p>
       <button class="btn">Buy Now</button>
@@ -161,11 +204,61 @@
     </p>
   </section>
 
-  <!-- Footer -->
-  <footer id="contact">
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <h2>Contact</h2>
     <p>📱 Nagod Payment: 01950178309</p>
+    <p>📧 Email: cyberteamhelp369@gmail.com</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
     <p>© 2025 CYBER TEAM HELP | Built by SHADOW JOKER</p>
   </footer>
 
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3 id="modal-title"></h3>
+      <p id="modal-price"></p>
+      <p>📱 Pay with Nagod: <b>01950178309</b></p>
+      <button class="btn" onclick="alert('✅ Order Confirmed! Please send payment to Nagod.')">Confirm Order</button>
+    </div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("search");
+    const categorySelect = document.getElementById("category");
+    const cards = document.querySelectorAll(".card");
+
+    searchInput.addEventListener("input", filterProducts);
+    categorySelect.addEventListener("change", filterProducts);
+
+    function filterProducts() {
+      const search = searchInput.value.toLowerCase();
+      const category = categorySelect.value;
+
+      cards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        const cat = card.dataset.category;
+        if ((category === "all" || cat === category) && name.includes(search)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    function showDetails(card) {
+      document.getElementById("modal-title").innerText = card.dataset.name;
+      document.getElementById("modal-price").innerText = "Price: ৳ " + card.dataset.price;
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+  </script>
 </body>
 </html>
